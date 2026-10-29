@@ -4940,7 +4940,7 @@ By default, Luanti assumes that the source strings in mods are written in Englis
 Starting from version 5.18.0, mod developers can specify any source language for
 their mod by writing the original source strings in that language.
 
-To declare the source language, you must add a `Source-Language` field
+To declare the source language, you must add a `X-Source-Language` field
 to the **English** translation file (specifying the source language in files
 for other locales will be ignored).
 
@@ -4948,13 +4948,13 @@ For `.po` and `.mo` files, the source language is specified in the header entry:
 ```po
 msgid ""
 msgstr ""
-"Source-Language: de\n"
+"X-Source-Language: de\n"
 ```
 
 For the old `.tr` format, add a comment immediately after the `textdomain` declaration:
 ```text
 # textdomain: mymod
-# Source-Language: de
+# X-Source-Language: de
 ```
 
 **Note:** Starting from version 5.18.0, the English translation is provided [server] and
@@ -12785,7 +12785,7 @@ Used by `HTTPApiTable.fetch` and `HTTPApiTable.fetch_async`.
     -- Not allowed for GET or HEAD method and `data` must be a table.
 
     quiet = boolean,
-    -- Optional, if true then error messages are suppressed on failure.
+    -- Optional, if true then error logging is suppressed on failure.
     -- Default is false.
 
     post_data = "Raw POST request data string" OR {field1 = "data1", field2 = "data2"},
@@ -12803,16 +12803,18 @@ Passed to `HTTPApiTable.fetch` callback. Returned by
 {
     completed = true,
     -- If true, the request has finished (either succeeded, failed or timed
-    -- out)
+    -- out).
 
     succeeded = true,
-    -- If true, the request was successful
+    -- If true, the request was successful.
+    -- Note that requests that returned an error status are still considered
+    -- "successful", so you should check `code` too.
 
     timeout = false,
-    -- If true, the request timed out
+    -- If true, the request timed out.
 
     code = 200,
-    -- HTTP status code
+    -- HTTP status code (0 if not known)
 
     data = "",
     -- Response body
